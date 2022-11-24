@@ -1,5 +1,5 @@
 # Shogi program 
-This is assignment 2
+This is assignment 3
 
 # Compile & Run
 
@@ -35,6 +35,9 @@ If one inputs the wrong value, the screem would display "違反遊戲規則，�
 
 ## choose the option(1:play/0:back to last step/s:save the record): s 
 * Once the player inputs s,it would save the record to the file (record.txt) 
+
+## choose the option(1:play/0:back to last step/s:save the record): x 
+* Once the player inputs x,it would replay the past records  
 
 
 ## To decide the winner
