@@ -201,7 +201,7 @@ void choose_Option1()
  fflush(stdin);
  while(1)
  {
-  printf("玩家X\nchoose the option(1:play/0:back to last step/s:save the record/x:replat the board): ");
+  printf("玩家X\nchoose the option(1:play/0:back to last step/s:save the record/x:replay the board): ");
   count++;
   scanf(" %s", option);
   if(option[0] == '1')//輸入1,下棋
@@ -245,7 +245,7 @@ void choose_Option2()
  fflush(stdin);
  while(1)
  {
-  printf("玩家Y\nchoose the option(1:play/0:back to last step/s:save the record/x:replat the board): ");
+  printf("玩家Y\nchoose the option(1:play/0:back to last step/s:save the record/x:replay the board): ");
   count++;
   scanf(" %s", option);
   if(option[0] == '1')//輸入1,下棋
