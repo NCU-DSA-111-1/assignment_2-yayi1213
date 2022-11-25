@@ -425,11 +425,11 @@ void printPastChessboard()
 //判斷是紅棋還是藍棋,紅棋返回 -1,藍棋返回 1,否則返回0
 int redOrBlue(int x, int y)
 {
-    if (chessPosition[x][y] == Red(飛) || chessPosition[x][y] == Red(桂) || chessPosition[x][y] == Red(銀) || chessPosition[x][y] == Red(金) || chessPosition[x][y] == Red(王) || chessPosition[x][y] == Red(角) || chessPosition[x][y] == Red(步) || chessPosition[x][y] == Red(香))
+    if (chessPosition[x][y] == Red(飛) || chessPosition[x][y] == Red(桂) || chessPosition[x][y] == Red(銀) || chessPosition[x][y] == Red(金) || chessPosition[x][y] == Red(王) || chessPosition[x][y] == Red(角) || chessPosition[x][y] == Red(步) || chessPosition[x][y] == Red(香) || chessPosition[x][y] == Red(龍) || chessPosition[x][y] == Red(馬) || chessPosition[x][y] == Red(と))
     {
         return -1;
     }
-    else if (chessPosition[x][y] == Blue(飛) || chessPosition[x][y] == Blue(桂) || chessPosition[x][y] == Blue(銀) || chessPosition[x][y] == Blue(金) || chessPosition[x][y] == Blue(王) || chessPosition[x][y] == Blue(角) || chessPosition[x][y] == Blue(步) || chessPosition[x][y] == Blue(香))
+    else if (chessPosition[x][y] == Blue(飛) || chessPosition[x][y] == Blue(桂) || chessPosition[x][y] == Blue(銀) || chessPosition[x][y] == Blue(金) || chessPosition[x][y] == Blue(王) || chessPosition[x][y] == Blue(角) || chessPosition[x][y] == Blue(步) || chessPosition[x][y] == Blue(香) || chessPosition[x][y] == Blue(龍) || chessPosition[x][y] == Blue(馬) || chessPosition[x][y] == Blue(と))
     {
         return 1;
     }
@@ -541,20 +541,7 @@ void rulesOfAllKindsOfChessPieces()
     // R（飛）----------------------------------------
     if (chessPosition[xi][yi] == Red(飛))
     {
-        if (xj >= 7)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Red(龍);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Red(龍);
-                fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+        
         if (yi == yj)
         {
             for (int i = xi + 1; i < xj; i++)
@@ -580,6 +567,20 @@ void rulesOfAllKindsOfChessPieces()
 
         if ((xi == xj || yi == yj) && isStandard && (redOrBlue(xj, yj) != -1)) //如果棋子直行、沒有犯規且落點不是紅棋，可以移動
         {
+            if (xj >= 7)
+        {
+            printf("是否要升變?(y/n)\n"); //棋子升變與否
+            scanf("%s", &y_n);
+            if (y_n == 'y')
+            {
+                chessPosition[xj][yj] = Red(龍);
+                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                chessPosition[xi][yi] = GAP;
+                chessPosition[xj][yj] = Red(龍);
+                fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                return;
+            }
+        }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(飛);
@@ -618,7 +619,9 @@ void rulesOfAllKindsOfChessPieces()
                     isStandard = 0;
         }
 
-        if ((xi == xj || yi == yj) || (xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi - 1) && isStandard && (redOrBlue(xj, yj) != -1)) //如果棋子直行、沒有犯規且落點不是紅棋，可以移動
+        if ((xi == xj || yi == yj) || (xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi - 1)){
+
+            if (isStandard && (redOrBlue(xj, yj) != -1)){  
         {
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
@@ -626,29 +629,18 @@ void rulesOfAllKindsOfChessPieces()
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
         }
+            }
         else
         {
             restart = 1;
         }
+        }
     }
+
     // B（飛）----------------------------------------
     else if (chessPosition[xi][yi] == Blue(飛))
     {
-        if (xj <= 3)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Blue(龍);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Blue(龍);
-                fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+        
 
         if (yi == yj)
         {
@@ -676,6 +668,21 @@ void rulesOfAllKindsOfChessPieces()
         }
         if ((xi == xj || yi == yj) && isStandard && redOrBlue(xj, yj) != 1) //如果棋子直行、沒有犯規且落點不是藍棋，可以移動
         {
+            if (xj <= 3)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Blue(龍);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Blue(龍);
+                    fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(飛);
@@ -714,39 +721,44 @@ void rulesOfAllKindsOfChessPieces()
                 if (chessPosition[xi][i] != GAP)
                     isStandard = 0;
         }
-        if ((xi == xj || yi == yj) || (xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi - 1) && isStandard && (redOrBlue(xj, yj) != 1)) //如果棋子直行、沒有犯規且落點不是藍棋，可以移動
-        {
+        if ((xi == xj || yi == yj) || (xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi - 1))
+         {
+            if(isStandard && (redOrBlue(xj, yj) != 1)) 
+            {
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(龍);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
-        }
+            }
+         }
         else
         {
             restart = 1;
         }
     }
+    
     // R（桂）----------------------------------------
     else if (chessPosition[xi][yi] == Red(桂))
     {
-        if (xj >= 7)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Red(金);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Red(金);
-                fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+        
 
         if ((redOrBlue(xj, yj) != -1) && isStandard && ((xj == xi + 2 && yj == yi - 1) || (xj == xi + 2 && yj == yi + 1)))
         {
+            if (xj >= 7)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Red(金);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Red(金);
+                    fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(桂);
@@ -762,23 +774,24 @@ void rulesOfAllKindsOfChessPieces()
     // B（桂）----------------------------------------
     else if (chessPosition[xi][yi] == Blue(桂))
     {
-        if (xj <= 3)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Blue(金);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Blue(金);
-                fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+       
         if ((redOrBlue(xj, yj) != 1) && isStandard && ((xj == xi - 2 && yj == yi - 1) || (xj == xi - 2 && yj == yi + 1)))
         {
+            if (xj <= 3)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Blue(金);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Blue(金);
+                    fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(桂);
@@ -794,20 +807,7 @@ void rulesOfAllKindsOfChessPieces()
     // R（角）----------------------------------------
     else if (chessPosition[xi][yi] == Red(角))
     {
-        if (xj >= 7)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Red(馬);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Red(馬);
-                fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+        
         int diff = 0;
         diff = abs(xi - xj);
         if ((yi < yj) && (xi < xj))
@@ -868,6 +868,20 @@ void rulesOfAllKindsOfChessPieces()
         }
         if ((xi != xj && yi != yj) && isStandard && (redOrBlue(xj, yj) != -1)) //如果棋子直行、沒有犯規且落點不是紅棋，可以移動
         {
+            if (xj >= 7)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Red(馬);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Red(馬);
+                    fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(角);
@@ -957,21 +971,7 @@ void rulesOfAllKindsOfChessPieces()
     // B（角）----------------------------------------
     if (chessPosition[xi][yi] == Blue(角))
     {
-        if (xj <= 3)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Blue(馬);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Blue(馬);
-                fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+       
         int diff = 0;
         diff = abs(xi - xj);
         if ((yi < yj) && (xi < xj))
@@ -1032,6 +1032,21 @@ void rulesOfAllKindsOfChessPieces()
         }
         if ((xi != xj && yi != yj) && isStandard && (redOrBlue(xj, yj) != 1)) //如果棋子直行、沒有犯規且落點不是藍棋，可以移動
         {
+            if (xj <= 3)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Blue(馬);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Blue(馬);
+                    fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(角);
@@ -1103,7 +1118,7 @@ void rulesOfAllKindsOfChessPieces()
                 isStandard = 0;
             }
         }
-        if ((xi != xj && yi != yj) || (xj == xi && yj == yi - 1) || (xj == xi && yj == yi + 1) || (xj == xi + 1 && yj == yi) || (xj == xi - 1 && yj == yi) && isStandard && (redOrBlue(xj, yj) != 1)) //如果棋子直行、沒有犯規且落點不是藍棋，可以移動
+        if ((xi != xj && yi != yj) || (xj == xi && yj == yi-1) || (xj == xi && yj == yi + 1) || (xj == xi + 1 && yj == yi) || (xj == xi - 1 && yj == yi) && isStandard && (redOrBlue(xj, yj) != 1)) //如果棋子直行、沒有犯規且落點不是藍棋，可以移動
         {
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
@@ -1118,27 +1133,28 @@ void rulesOfAllKindsOfChessPieces()
     // R（步）----------------------------------------
     else if (chessPosition[xi][yi] == Red(步))
     {
-        if (xj >= 7)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
 
-            if (y_n == 'y')
-            {
-
-                chessPosition[xj][yj] = Red(と);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Red(と);
-
-                fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
         if (xi > xj)
             isStandard = 0;                                                      //如果倒退，則不符合規則
         if (isStandard && redOrBlue(xj, yj) != -1 && (xj == xi + 1 && yj == yi)) //
         {
+            if (xj >= 7)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+
+                if (y_n == 'y')
+                {
+
+                    chessPosition[xj][yj] = Red(と);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Red(と);
+
+                    fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(步);
@@ -1168,26 +1184,27 @@ void rulesOfAllKindsOfChessPieces()
     // B（步）----------------------------------------
     else if (chessPosition[xi][yi] == Blue(步))
     {
-        if (xj <= 3)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Blue(と);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Blue(と);
-
-                fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+       
         if (xi < xj)
             isStandard = 0; //如果倒退，則不符合規則
         if (isStandard && redOrBlue(xj, yj) != 1 && (xj == xi - 1 && yj == yi))
         {
+            if (xj <= 3)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Blue(と);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Blue(と);
+
+                    fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(步);
@@ -1217,24 +1234,24 @@ void rulesOfAllKindsOfChessPieces()
     // R（銀）----------------------------------------
     else if (chessPosition[xi][yi] == Red(銀))
     {
-        if (xj >= 7)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Red(金);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Red(金);
-                fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
 
         if ((redOrBlue(xj, yj) != -1) && ((xj == xi + 1 && yj == yi - 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi) || (xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1)))
         {
             {
+                if (xj >= 7)
+                {
+                    printf("是否要升變?(y/n)\n"); //棋子升變與否
+                    scanf("%s", &y_n);
+                    if (y_n == 'y')
+                    {
+                        chessPosition[xj][yj] = Red(金);
+                        insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                        chessPosition[xi][yi] = GAP;
+                        chessPosition[xj][yj] = Red(金);
+                        fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                        return;
+                    }
+                }
                 insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                 chessPosition[xi][yi] = GAP;
                 chessPosition[xj][yj] = Red(銀);
@@ -1250,23 +1267,24 @@ void rulesOfAllKindsOfChessPieces()
     // B（銀）----------------------------------------
     else if (chessPosition[xi][yi] == Blue(銀))
     {
-        if (xj <= 3)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Blue(金);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Blue(金);
-                fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+        
         if ((redOrBlue(xj, yj) != 1) && ((xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi - 1 && yj == yi) || (xj == xi + 1 && yj == yi - 1) || (xj == xi + 1 && yj == yi + 1)))
         {
+            if (xj <= 3)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Blue(金);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Blue(金);
+                    fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(銀);
@@ -1313,20 +1331,7 @@ void rulesOfAllKindsOfChessPieces()
     // R（香）----------------------------------------
     else if (chessPosition[xi][yi] == Red(香))
     {
-        if (xj >= 7)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Red(金);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Red(金);
-                fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+        
 
         if (xi > xj)
             isStandard = 0; //如果倒退，則不符合規則
@@ -1341,6 +1346,20 @@ void rulesOfAllKindsOfChessPieces()
         }
         if ((yi == yj) && isStandard && (redOrBlue(xj, yj) != -1))
         {
+            if (xj >= 7)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Red(金);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Red(金);
+                    fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(香);
@@ -1354,21 +1373,7 @@ void rulesOfAllKindsOfChessPieces()
     // B（香）----------------------------------------
     else if (chessPosition[xi][yi] == Blue(香))
     {
-        if (xj <= 3)
-        {
-            printf("是否要升變?(y/n)\n"); //棋子升變與否
-            scanf("%s", &y_n);
-
-            if (y_n == 'y')
-            {
-                chessPosition[xj][yj] = Blue(金);
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
-                chessPosition[xi][yi] = GAP;
-                chessPosition[xj][yj] = Blue(金);
-                fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
-                return;
-            }
-        }
+       
         if (xi < xj)
             isStandard = 0; //如果倒退，則不符合規則
         if (yi == yj)       //列坐標不變，同列移動
@@ -1383,6 +1388,21 @@ void rulesOfAllKindsOfChessPieces()
 
         if ((yi == yj) && isStandard && (redOrBlue(xj, yj) != 1)) //
         {
+            if (xj <= 3)
+            {
+                printf("是否要升變?(y/n)\n"); //棋子升變與否
+                scanf("%s", &y_n);
+
+                if (y_n == 'y')
+                {
+                    chessPosition[xj][yj] = Blue(金);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+                    chessPosition[xi][yi] = GAP;
+                    chessPosition[xj][yj] = Blue(金);
+                    fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
+                    return;
+                }
+            }
             insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(香);
