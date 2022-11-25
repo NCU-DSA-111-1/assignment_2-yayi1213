@@ -12,7 +12,7 @@ gcc main.c
 # Proccess
 
 ## choose the option(1:play/0:back to last step/s:save the record/x:replay the board): 1
-*Once the player inputs 1, X player and Y player take turn to play the shogi 
+* Once the player inputs 1, X player and Y player can take turn to play the shogi 
 
 ## X player
 玩家X[藍棋]請輸入你要移動的棋子: <br />
@@ -21,7 +21,7 @@ gcc main.c
 * Input the number on the right side first and then input the top of the number to decide where the piece to go
 
 是否要升變?(y/n) : <br />
-* If x of destination is smaller than 3 or equal to 3, the player should input y or n
+* If x of destination is smaller than 3 or equal to 3, the player should input y or n (y:yes/n:no)
 * If y_n ='y', the shogi(Silver General, Knight, Lance, Bishop, Rook, Pawn) will be promotion 
 
 If one inputs the wrong value, the screem would display "違反遊戲規則，請重新輸入"<br />
@@ -35,7 +35,7 @@ If one inputs the wrong value, the screem would display "違反遊戲規則，�
 * Input the number on the right side first and then input the top of the number to decide where the piece to go
 
 是否要升變?(y/n) : <br />
-* If x of destination is larger than 7 or equal to 7, the player should input y or n
+* If x of destination is larger than 7 or equal to 7, the player should input y or n (y:yes/n:no)
 * If y_n ='y', the shogi(Silver General, Knight, Lance, Bishop, Rook, Pawn) will be promotion 
 
 If one inputs the wrong value, the screem would display "違反遊戲規則，請重新輸入"<br />
