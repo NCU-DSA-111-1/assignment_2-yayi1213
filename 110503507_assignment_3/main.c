@@ -11,8 +11,7 @@ FILE *record = NULL; //檔案名稱
 //定義外部變量,棋盤坐標
 char *chessPosition[10][10];
 char *s_chessPosition[10][10];
-char y_n;
-int yno;
+char y_n;              //是否要升變yes or no
 int b1, xi, yi;        //要移動的棋子位置
 int b2, xj, yj;        //移動的目標位置
 bool isStandard = 1;   //是否符合規則，初始值1，符合
@@ -52,19 +51,20 @@ void replay();
 void printPastChessboard();
 //紀錄棋盤
 void keepBoard(void);
+
 //**************************鏈結*******************************
 //結構生成
-struct node
+    struct node
 {
     int xfrom, yfrom, xto, yto;
     char *destination;
     struct node *next;
-    struct node *prev;
+
 };
 typedef struct node NODE;
 NODE *stack = NULL;
 
-// insert link at the last location
+//加入鏈結
 void insert(int data1, int data2, int data3, int data4, char *data5)
 {
     //產生link
@@ -116,6 +116,8 @@ int goback()
     free(link);
     return 0;
 }
+
+//反轉鏈結
 NODE *inverse()
 {
     NODE *front, *fnext, *list;
@@ -130,10 +132,12 @@ NODE *inverse()
     }
     return (front);
 }
+
 /*印出開始後的所有步伐*/
 void replay()
 {
     NODE *link;
+    
     int t = 0;
     for (int i = 0; i < ROW; i++)
     {
@@ -142,7 +146,7 @@ void replay()
             chessPosition[i][j] = s_chessPosition[i][j];
         }
     }
-    link = stack;
+    link = inverse();
     do
     {
         int a, b, c, d;
@@ -150,8 +154,7 @@ void replay()
         b = link->yfrom;
         c = link->xto;
         d = link->yto;
-        // chessPosition[a][b] = link->destination;
-        chessPosition[c][d] = chessPosition[a][b];
+        chessPosition[c][d] = link->destination;
         chessPosition[a][b] = GAP;
 
         printf("\n****** %d step ********\n", t + 1);
@@ -278,7 +281,6 @@ void choose_Option2()
             printf("continue\n");
             return;
         }
-
         if (option[0] == '0') //輸入0,悔棋
         {
 
@@ -293,7 +295,6 @@ void choose_Option2()
                 continue;
             }
         }
-
         if (option[0] == 's') //輸入s,存取資料
         {
             saveRecord();
@@ -581,9 +582,9 @@ void rulesOfAllKindsOfChessPieces()
                 return;
             }
         }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(飛);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
         }
@@ -622,10 +623,10 @@ void rulesOfAllKindsOfChessPieces()
         if ((xi == xj || yi == yj) || (xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi - 1)){
 
             if (isStandard && (redOrBlue(xj, yj) != -1)){  
-        {
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+        {        
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(龍);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
         }
@@ -640,8 +641,6 @@ void rulesOfAllKindsOfChessPieces()
     // B（飛）----------------------------------------
     else if (chessPosition[xi][yi] == Blue(飛))
     {
-        
-
         if (yi == yj)
         {
             for (int i = xi + 1; i < xj; i++)
@@ -675,17 +674,17 @@ void rulesOfAllKindsOfChessPieces()
 
                 if (y_n == 'y')
                 {
-                    chessPosition[xj][yj] = Blue(龍);
-                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+
                     chessPosition[xi][yi] = GAP;
                     chessPosition[xj][yj] = Blue(龍);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
                     return;
                 }
-            }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+            }            
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(飛);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
         }
@@ -724,10 +723,10 @@ void rulesOfAllKindsOfChessPieces()
         if ((xi == xj || yi == yj) || (xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi - 1))
          {
             if(isStandard && (redOrBlue(xj, yj) != 1)) 
-            {
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+            { 
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(龍);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
             }
@@ -751,17 +750,16 @@ void rulesOfAllKindsOfChessPieces()
                 scanf("%s", &y_n);
                 if (y_n == 'y')
                 {
-                    chessPosition[xj][yj] = Red(金);
-                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     chessPosition[xi][yi] = GAP;
                     chessPosition[xj][yj] = Red(金);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(桂);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
         }
@@ -792,9 +790,9 @@ void rulesOfAllKindsOfChessPieces()
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(桂);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
         }
@@ -882,9 +880,9 @@ void rulesOfAllKindsOfChessPieces()
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(角);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
         }
@@ -956,9 +954,9 @@ void rulesOfAllKindsOfChessPieces()
         }
         if ((xi != xj && yi != yj) || (xj == xi && yj == yi - 1) || (xj == xi && yj == yi + 1) || (xj == xi + 1 && yj == yi) || (xj == xi - 1 && yj == yi) && isStandard && (redOrBlue(xj, yj) != -1)) //如果棋子直行、沒有犯規且落點不是紅棋，可以移動
         {
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(馬);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             return;
         }
@@ -1039,17 +1037,17 @@ void rulesOfAllKindsOfChessPieces()
 
                 if (y_n == 'y')
                 {
-                    chessPosition[xj][yj] = Blue(馬);
-                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     chessPosition[xi][yi] = GAP;
                     chessPosition[xj][yj] = Blue(馬);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
+            
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(角);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1120,9 +1118,9 @@ void rulesOfAllKindsOfChessPieces()
         }
         if ((xi != xj && yi != yj) || (xj == xi && yj == yi-1) || (xj == xi && yj == yi + 1) || (xj == xi + 1 && yj == yi) || (xj == xi - 1 && yj == yi) && isStandard && (redOrBlue(xj, yj) != 1)) //如果棋子直行、沒有犯規且落點不是藍棋，可以移動
         {
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(馬);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1134,9 +1132,9 @@ void rulesOfAllKindsOfChessPieces()
     else if (chessPosition[xi][yi] == Red(步))
     {
 
-        if (xi > xj)
-            isStandard = 0;                                                      //如果倒退，則不符合規則
-        if (isStandard && redOrBlue(xj, yj) != -1 && (xj == xi + 1 && yj == yi)) //
+        if (xi > xj) //如果倒退，則不符合規則
+            isStandard = 0;                                                      
+        if (isStandard && redOrBlue(xj, yj) != -1 && (xj == xi + 1 && yj == yi)) 
         {
             if (xj >= 7)
             {
@@ -1145,19 +1143,17 @@ void rulesOfAllKindsOfChessPieces()
 
                 if (y_n == 'y')
                 {
-
-                    chessPosition[xj][yj] = Red(と);
-                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     chessPosition[xi][yi] = GAP;
                     chessPosition[xj][yj] = Red(と);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
 
                     fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(步);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1170,9 +1166,9 @@ void rulesOfAllKindsOfChessPieces()
     {
         if ((redOrBlue(xj, yj) != -1) && ((xj == xi + 1 && yj == yi - 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi) || (xj == xi - 1 && yj == yi) || (xj == xi && yj == yi - 1) || (xj == xi && yj == yi + 1)))
         {
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(と);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1184,9 +1180,9 @@ void rulesOfAllKindsOfChessPieces()
     // B（步）----------------------------------------
     else if (chessPosition[xi][yi] == Blue(步))
     {
-       
-        if (xi < xj)
-            isStandard = 0; //如果倒退，則不符合規則
+
+        if (xi < xj) //如果倒退，則不符合規則
+            isStandard = 0; 
         if (isStandard && redOrBlue(xj, yj) != 1 && (xj == xi - 1 && yj == yi))
         {
             if (xj <= 3)
@@ -1196,18 +1192,16 @@ void rulesOfAllKindsOfChessPieces()
 
                 if (y_n == 'y')
                 {
-                    chessPosition[xj][yj] = Blue(と);
-                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     chessPosition[xi][yi] = GAP;
                     chessPosition[xj][yj] = Blue(と);
-
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(步);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1221,9 +1215,9 @@ void rulesOfAllKindsOfChessPieces()
     {
         if ((redOrBlue(xj, yj) != 1) && ((xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi - 1 && yj == yi) || (xj == xi + 1 && yj == yi) || (xj == xi && yj == yi - 1) || (xj == xi && yj == yi + 1)))
         {
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(と);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1244,17 +1238,16 @@ void rulesOfAllKindsOfChessPieces()
                     scanf("%s", &y_n);
                     if (y_n == 'y')
                     {
-                        chessPosition[xj][yj] = Red(金);
-                        insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                         chessPosition[xi][yi] = GAP;
                         chessPosition[xj][yj] = Red(金);
+                        insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                         fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
                         return;
                     }
                 }
-                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                 chessPosition[xi][yi] = GAP;
                 chessPosition[xj][yj] = Red(銀);
+                insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                 fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
             }
         }
@@ -1277,17 +1270,16 @@ void rulesOfAllKindsOfChessPieces()
 
                 if (y_n == 'y')
                 {
-                    chessPosition[xj][yj] = Blue(金);
-                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     chessPosition[xi][yi] = GAP;
                     chessPosition[xj][yj] = Blue(金);
+                    insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(銀);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1300,10 +1292,9 @@ void rulesOfAllKindsOfChessPieces()
     {
         if ((redOrBlue(xj, yj) != -1) && ((xj == xi + 1 && yj == yi - 1) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi) || (xj == xi - 1 && yj == yi) || (xj == xi && yj == yi - 1) || (xj == xi && yj == yi + 1)))
         {
-
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(金);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1318,9 +1309,9 @@ void rulesOfAllKindsOfChessPieces()
         if ((redOrBlue(xj, yj) != 1) && ((xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi - 1 && yj == yi) || (xj == xi + 1 && yj == yi) || (xj == xi && yj == yi - 1) || (xj == xi && yj == yi + 1)))
         {
 
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(金);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1352,7 +1343,6 @@ void rulesOfAllKindsOfChessPieces()
                 scanf("%s", &y_n);
                 if (y_n == 'y')
                 {
-                    chessPosition[xj][yj] = Red(金);
                     insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     chessPosition[xi][yi] = GAP;
                     chessPosition[xj][yj] = Red(金);
@@ -1360,9 +1350,9 @@ void rulesOfAllKindsOfChessPieces()
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(香);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1395,7 +1385,6 @@ void rulesOfAllKindsOfChessPieces()
 
                 if (y_n == 'y')
                 {
-                    chessPosition[xj][yj] = Blue(金);
                     insert(xi, yi, xj, yj, chessPosition[xj][yj]);
                     chessPosition[xi][yi] = GAP;
                     chessPosition[xj][yj] = Blue(金);
@@ -1403,9 +1392,9 @@ void rulesOfAllKindsOfChessPieces()
                     return;
                 }
             }
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(香);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1419,9 +1408,9 @@ void rulesOfAllKindsOfChessPieces()
     {
         if ((redOrBlue(xj, yj) != -1) && ((xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi - 1 && yj == yi) || (xj == xi + 1 && yj == yi) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi - 1) || (xj == xi && yj == yi + 1) || (xj == xi && yj == yi - 1)))
         {
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Red(王);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player Y -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
@@ -1434,9 +1423,9 @@ void rulesOfAllKindsOfChessPieces()
     {
         if ((redOrBlue(xj, yj) != 1) && ((xj == xi - 1 && yj == yi - 1) || (xj == xi - 1 && yj == yi + 1) || (xj == xi - 1 && yj == yi) || (xj == xi + 1 && yj == yi) || (xj == xi + 1 && yj == yi + 1) || (xj == xi + 1 && yj == yi - 1) || (xj == xi && yj == yi + 1) || (xj == xi && yj == yi - 1)))
         {
-            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             chessPosition[xi][yi] = GAP;
             chessPosition[xj][yj] = Blue(王);
+            insert(xi, yi, xj, yj, chessPosition[xj][yj]);
             fprintf(record, "player X -> xi:%d,yi:%d,xj:%d,yj:%d,goalplace:%s\n", xi, yi, xj, yj, chessPosition[xj][yj]);
         }
         else
