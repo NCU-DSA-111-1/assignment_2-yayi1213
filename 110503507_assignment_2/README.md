@@ -12,11 +12,12 @@ gcc main.c
 # Proccess
 
 ## choose the option(1:play/0:back to last step/s:save the record): 1
-*Once the player inputs 1, X player and Y player take turn to play the shogi 
+*Once the player inputs 1, X player and Y player can take turn to play the shogi 
 
 ## X player
 玩家X[藍棋]請輸入你要移動的棋子: <br />
 * Input the number on the right side first and then input the top of the number to decide which piece to move 
+
 玩家X[藍棋]請輸入你要放置的位置: <br />
 * Input the number on the right side first and then input the top of the number to decide where the piece to go
 
@@ -24,6 +25,7 @@ gcc main.c
 
 玩家Y[紅棋]請輸入你要移動的棋子: <br />
 * Input the number on the right side first and then input the top of the number to decide which piece to move 
+
 玩家Y[紅棋]請輸入你要放置的位置: <br />
 * Input the number on the right side first and then input the top of the number to decide where the piece to go
 
