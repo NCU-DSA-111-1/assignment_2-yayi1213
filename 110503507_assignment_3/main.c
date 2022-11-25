@@ -367,15 +367,15 @@ void chessBoardBuilding()
     {
         chessPosition[7][k] = Blue(步);
     }
-    chessPosition[0][0] = White(9 |);
-    chessPosition[0][1] = White(8 |);
-    chessPosition[0][2] = White(7 |);
-    chessPosition[0][3] = White(6 |);
-    chessPosition[0][4] = White(5 |);
-    chessPosition[0][5] = White(4 |);
-    chessPosition[0][6] = White(3 |);
-    chessPosition[0][7] = White(2 |);
-    chessPosition[0][8] = White(1 |);
+    chessPosition[0][0] = White(9|);
+    chessPosition[0][1] = White(8|);
+    chessPosition[0][2] = White(7|);
+    chessPosition[0][3] = White(6|);
+    chessPosition[0][4] = White(5|);
+    chessPosition[0][5] = White(4|);
+    chessPosition[0][6] = White(3|);
+    chessPosition[0][7] = White(2|);
+    chessPosition[0][8] = White(1|);
     chessPosition[0][9] = White();
     chessPosition[1][9] = White(一);
     chessPosition[2][9] = White(二);
