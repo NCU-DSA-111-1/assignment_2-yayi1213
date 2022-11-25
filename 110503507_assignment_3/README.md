@@ -17,6 +17,7 @@ gcc main.c
 ## X player
 玩家X[藍棋]請輸入你要移動的棋子: <br />
 * Input the number on the right side first and then input the top of the number to decide which piece to move  
+
 玩家X[藍棋]請輸入你要放置的位置: <br />
 * Input the number on the right side first and then input the top of the number to decide where the piece to go
 
@@ -30,7 +31,8 @@ If one inputs the wrong value, the screem would display "違反遊戲規則，�
 ## Y player
 
 玩家Y[紅棋]請輸入你要移動的棋子: <br />
-* Input the number on the right side first and then input the top of the number to decide which piece to move   
+* Input the number on the right side first and then input the top of the number to decide which piece to move  
+ 
 玩家Y[紅棋]請輸入你要放置的位置: <br />
 * Input the number on the right side first and then input the top of the number to decide where the piece to go
 
