@@ -11,7 +11,7 @@ gcc main.c
 
 # Proccess
 
-## choose the option(1:play/0:back to last step/s:save the record): 1
+## choose the option(1:play/0:back to last step/s:save the record/x:replay the board): 1
 *Once the player inputs 1, X player and Y player take turn to play the shogi 
 
 ## X player
@@ -25,7 +25,7 @@ gcc main.c
 * If y_n ='y', the shogi(Silver General, Knight, Lance, Bishop, Rook, Pawn) will be promotion 
 
 If one inputs the wrong value, the screem would display "違反遊戲規則，請重新輸入"<br />
-* Input the character again to choose the option(1:play/0:back to last step/s:save the record): 
+* Input the character again to choose the option(1:play/0:back to last step/s:save the record/x:replay the board): 
 
 ## Y player
 
@@ -39,7 +39,7 @@ If one inputs the wrong value, the screem would display "違反遊戲規則，�
 * If y_n ='y', the shogi(Silver General, Knight, Lance, Bishop, Rook, Pawn) will be promotion 
 
 If one inputs the wrong value, the screem would display "違反遊戲規則，請重新輸入"<br />
-* Input the character again to choose the option(1:play/0:back to last step/s:save the record): 
+* Input the character again to choose the option(1:play/0:back to last step/s:save the record/x:replay the board): 
 
 ## choose the option(1:play/0:back to last step/s:save the record/x:replay the board): 0 
 * Once the player inputs 0, the piece of the opponent would return to the last step 
