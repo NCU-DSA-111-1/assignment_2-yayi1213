@@ -1,2 +1,0 @@
-player X -> xi:8,yi:7,xj:8,yj:8,goalplace:[34m飛[0m
-player Y -> xi:1,yi:8,xj:2,yj:8,goalplace:[31m香[0m
