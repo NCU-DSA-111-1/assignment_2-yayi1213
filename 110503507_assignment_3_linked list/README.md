@@ -7,7 +7,7 @@ This is assignment 3
 gcc main.c 
 
 * Run
-./a.out
+./a.out -n-s (new game file name)
 
 # Proccess
 
